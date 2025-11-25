@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
 
@@ -6,25 +7,20 @@ export default function Header(){
   const { user, logout, openAuth, setShowAdmin } = useAuth()
   const { setShowCart, getCartCount } = useCart()
   const [showUserMenu, setShowUserMenu] = useState(false)
-
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id)
-    if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const location = useLocation()
 
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <div className="logo"> 
-          <div className="logo-mark">H</div>
-          <div className="logo-text">Heyfa</div>
-        </div>
+        <Link to="/" className="logo"> 
+          <div className="logo-mark">HNA</div>
+        </Link>
 
         <nav className="nav">
-          <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}) }}>Home</a>
-          <a href="#categories" onClick={(e) => { e.preventDefault(); scrollToSection('categories') }}>Shop</a>
-          <a href="#products" onClick={(e) => { e.preventDefault(); scrollToSection('products') }}>Products</a>
-          <a href="#footer" onClick={(e) => { e.preventDefault(); scrollToSection('footer') }}>Contact</a>
+          <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Home</Link>
+          <Link to="/shop" className={location.pathname === '/shop' ? 'active' : ''}>Shop</Link>
+          <Link to="/products" className={location.pathname === '/products' ? 'active' : ''}>Products</Link>
+          <Link to="/contact" className={location.pathname === '/contact' ? 'active' : ''}>Contact</Link>
         </nav>
 
         <div className="header-actions">

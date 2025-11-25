@@ -5,9 +5,8 @@ export default function Footer(){
     <footer id="footer" className="site-footer">
       <div className="container footer-inner">
         <div className="footer-brand">
-          <div className="logo-mark">H</div>
+          <div className="logo-mark">HNA</div>
           <div>
-            <div className="logo-text">Heyfa</div>
             <div className="muted">Quality furniture since 2020</div>
           </div>
         </div>

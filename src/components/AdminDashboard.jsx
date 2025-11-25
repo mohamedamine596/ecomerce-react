@@ -12,8 +12,27 @@ export default function AdminDashboard() {
     title: '',
     price: '',
     oldPrice: '',
-    img: ''
+    img: '',
+    category: 'chairs'
   })
+
+  const availableImages = [
+    '/ecomerce-pic/pexels-pixabay-276583.jpg',
+    '/ecomerce-pic/pexels-maksgelatin-4352247.jpg',
+    '/ecomerce-pic/pexels-fotoaibe-1571460.jpg',
+    '/ecomerce-pic/pexels-pixabay-279746.jpg',
+    '/ecomerce-pic/pexels-marianne-67058-238377.jpg',
+    '/ecomerce-pic/pexels-pixabay-37347.jpg',
+    '/ecomerce-pic/pexels-kowalievska-1148955.jpg',
+    '/ecomerce-pic/pexels-steve-923192.jpg',
+    '/ecomerce-pic/pexels-pixabay-220749.jpg',
+    '/ecomerce-pic/pexels-falling4utah-1080696.jpg',
+    '/ecomerce-pic/pexels-donaldtong94-133919.jpg',
+    '/ecomerce-pic/pexels-atbo-66986-245208.jpg',
+    '/ecomerce-pic/pexels-dropshado-2251247.jpg',
+    '/ecomerce-pic/pexels-eric-mufasa-578798-1350789.jpg',
+    '/ecomerce-pic/pexels-medhat-ayad-122846-447592.jpg'
+  ]
 
   useEffect(() => {
     loadProducts()
@@ -37,7 +56,8 @@ export default function AdminDashboard() {
       title: productForm.title,
       price: parseFloat(productForm.price),
       old: productForm.oldPrice ? parseFloat(productForm.oldPrice) : null,
-      img: productForm.img || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop'
+      category: productForm.category,
+      img: productForm.img || '/ecomerce-pic/pexels-pixabay-276583.jpg'
     }
 
     let updatedProducts
@@ -51,7 +71,7 @@ export default function AdminDashboard() {
     setProducts(updatedProducts)
     setShowProductForm(false)
     setEditingProduct(null)
-    setProductForm({ title: '', price: '', oldPrice: '', img: '' })
+    setProductForm({ title: '', price: '', oldPrice: '', img: '', category: 'chairs' })
   }
 
   const deleteProduct = (id) => {
@@ -68,7 +88,8 @@ export default function AdminDashboard() {
       title: product.title,
       price: product.price,
       oldPrice: product.old || '',
-      img: product.img
+      img: product.img,
+      category: product.category || 'chairs'
     })
     setShowProductForm(true)
   }
@@ -159,13 +180,36 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                     <div className="form-group">
-                      <label>Image URL</label>
-                      <input
-                        type="url"
+                      <label>Category</label>
+                      <select
+                        value={productForm.category}
+                        onChange={(e) => setProductForm({...productForm, category: e.target.value})}
+                        required
+                      >
+                        <option value="chairs">Chairs</option>
+                        <option value="sofas">Sofas</option>
+                        <option value="tables">Tables</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Product Image</label>
+                      <select
                         value={productForm.img}
                         onChange={(e) => setProductForm({...productForm, img: e.target.value})}
-                        placeholder="https://..."
-                      />
+                        required
+                      >
+                        <option value="">Select an image...</option>
+                        {availableImages.map((img, idx) => (
+                          <option key={idx} value={img}>
+                            {img.split('/').pop().replace('.jpg', '')}
+                          </option>
+                        ))}
+                      </select>
+                      {productForm.img && (
+                        <div className="image-preview">
+                          <img src={productForm.img} alt="Preview" />
+                        </div>
+                      )}
                     </div>
                     <div className="form-actions">
                       <button type="submit" className="btn primary">
@@ -177,7 +221,7 @@ export default function AdminDashboard() {
                         onClick={() => {
                           setShowProductForm(false)
                           setEditingProduct(null)
-                          setProductForm({ title: '', price: '', oldPrice: '', img: '' })
+                          setProductForm({ title: '', price: '', oldPrice: '', img: '', category: 'chairs' })
                         }}
                       >
                         Cancel
@@ -193,6 +237,7 @@ export default function AdminDashboard() {
                     <tr>
                       <th>Image</th>
                       <th>Title</th>
+                      <th>Category</th>
                       <th>Price</th>
                       <th>Old Price</th>
                       <th>Actions</th>
@@ -201,7 +246,7 @@ export default function AdminDashboard() {
                   <tbody>
                     {products.length === 0 && (
                       <tr>
-                        <td colSpan="5" style={{textAlign: 'center', color: 'var(--muted)'}}>
+                        <td colSpan="6" style={{textAlign: 'center', color: 'var(--muted)'}}>
                           No products yet. Add your first product!
                         </td>
                       </tr>
@@ -212,6 +257,7 @@ export default function AdminDashboard() {
                           <img src={product.img} alt={product.title} className="table-img" />
                         </td>
                         <td>{product.title}</td>
+                        <td><span className="category-tag">{product.category || 'chairs'}</span></td>
                         <td>${product.price}</td>
                         <td>{product.old ? `$${product.old}` : '-'}</td>
                         <td>
